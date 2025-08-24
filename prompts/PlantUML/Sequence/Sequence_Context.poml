@@ -1,0 +1,427 @@
+<poml syntax="markdown">
+  <!-- PlantUML Sequence Diagram Context for Assistant -->
+  <meta>
+    <title>PlantUML Sequence Diagram Context</title>
+    <description>
+      PlantUMLシーケンス図作成のための包括的なコンテキスト情報。
+      構文、機能、ベストプラクティスを網羅。
+    </description>
+    <version>2.0.0</version>
+    <updated>2025-08-24</updated>
+  </meta>
+
+  <h>基本構文</h>
+  <section>
+    <cp caption="図の基本構造">
+      <list>
+        <item>@startuml と @enduml で図を囲む</item>
+        <item>メッセージ: -#gt; (実線), --#gt; (点線)</item>
+        <item>逆方向: #lt;-, #lt;-- も使用可能（可読性向上のため）</item>
+        <item>参加者は明示的に宣言不要（自動生成される）</item>
+      </list>
+    </cp>
+
+    <cp caption="基本例">
+      <code lang="plantuml">
+@startuml
+Alice -#gt; Bob: Authentication Request
+Bob --#gt; Alice: Authentication Response
+@enduml
+      </code>
+    </cp>
+  </section>
+
+  <h>参加者（Participants）</h>
+  <section>
+    <cp caption="参加者の種類と宣言">
+      <list>
+        <item>participant: 基本的な参加者</item>
+        <item>actor: アクター（人物を表現）</item>
+        <item>boundary: 境界オブジェクト</item>
+        <item>control: 制御オブジェクト</item>
+        <item>entity: エンティティオブジェクト</item>
+        <item>database: データベース</item>
+        <item>collections: コレクション</item>
+        <item>queue: キュー</item>
+      </list>
+    </cp>
+
+    <cp caption="参加者のカスタマイズ">
+      <code lang="plantuml">
+participant "Long Name" as L
+actor Bob #red
+participant Alice #lt;#lt;(C,#ADD1B2) Testable#gt;#gt;
+participant First order 10
+      </code>
+
+      <list>
+        <item>as キーワードで別名定義</item>
+        <item>#hash;color で背景色指定</item>
+        <item>#lt;#lt;stereotype#gt;#gt; でステレオタイプ付与</item>
+        <item>order キーワードで表示順制御</item>
+        <item>引用符で記号や空白を含む名前に対応</item>
+      </list>
+    </cp>
+
+    <cp caption="複数行タイトルとグループ化">
+      <code lang="plantuml">
+participant Participant [
+    =Title
+    ----
+    ""SubTitle""
+]
+
+box "Internal Service" #LightBlue
+participant Alice
+participant Bob
+end box
+      </code>
+    </cp>
+
+    <cp caption="参加者制御">
+      <list>
+        <item>hide footbox: フットボックス非表示</item>
+        <item>hide unlinked: 未接続参加者を非表示</item>
+        <item>skinparam stereotypePosition top|bottom: ステレオタイプ位置</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>メッセージと矢印</h>
+  <section>
+    <cp caption="矢印の種類">
+      <list>
+        <item>-#gt;: 実線矢印</item>
+        <item>--#gt;: 点線矢印</item>
+        <item>-#gt;#gt;: 細い矢印</item>
+        <item>-#gt;x: 消失メッセージ</item>
+        <item>-\, -/, -\\, -//: 部分的矢印</item>
+        <item>-#gt;o, o-#gt;: 丸付き矢印</item>
+        <item>#lt;-#gt;: 双方向矢印</item>
+        <item>-#gt;(nn), (nn)#lt;-: 傾斜矢印（v1.2022.6beta+）</item>
+      </list>
+    </cp>
+
+    <cp caption="自己メッセージ">
+      <code lang="plantuml">
+Alice -#gt; Alice: This is a signal to self.\nIt also demonstrates\nmultiline \ntext
+      </code>
+    </cp>
+
+    <cp caption="メッセージの装飾">
+      <list>
+        <item>Bob -[#hash;red]#gt; Alice: 色付きメッセージ</item>
+        <item>\n: 改行</item>
+        <item>skinparam maxMessageSize n: 自動改行設定</item>
+        <item>skinparam sequenceMessageAlign left|right|center: テキスト位置</item>
+        <item>skinparam responseMessageBelowArrow true: 応答を矢印下に表示</item>
+      </list>
+    </cp>
+
+    <cp caption="自動番号付け">
+      <code lang="plantuml">
+autonumber
+autonumber 15
+autonumber 40 10
+autonumber "#lt;b#gt;[000]"
+autonumber stop
+autonumber resume
+autonumber inc A
+      </code>
+      
+      <list>
+        <item>autonumber: 自動番号開始</item>
+        <item>開始値と増分を指定可能</item>
+        <item>DecimalFormat形式での書式指定</item>
+        <item>stop/resume で一時停止・再開</item>
+        <item>inc A/B で階層番号制御</item>
+        <item>%autonumber%: 現在値参照</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>ノートと注釈</h>
+  <section>
+    <cp caption="メッセージノート">
+      <code lang="plantuml">
+Alice-#gt;Bob : hello
+note left: this is a first note
+note right
+  複数行のノートも
+  作成できます
+end note
+      </code>
+    </cp>
+
+    <cp caption="参加者ノート">
+      <code lang="plantuml">
+note left of Alice: 左側のノート
+note right of Alice: 右側のノート
+note over Alice: 上のノート
+note over Alice, Bob #FFAAAA: 複数参加者にまたがるノート
+note across: 全参加者にまたがるノート
+      </code>
+    </cp>
+
+    <cp caption="ノートの形状と配置">
+      <list>
+        <item>hnote: 六角形ノート</item>
+        <item>rnote: 四角形ノート</item>
+        <item>note #color: 色付きノート</item>
+        <item>/note: 同レベル配置（整列）</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>ライフラインと時間制御</h>
+  <section>
+    <cp caption="アクティベーション">
+      <code lang="plantuml">
+User -#gt; A: DoWork
+activate A
+A -#gt; B: Create Request
+activate B #LightBlue
+B --#gt; A: Response
+deactivate B
+A --#gt; User: Done
+deactivate A
+      </code>
+    </cp>
+
+    <cp caption="ライフライン制御">
+      <list>
+        <item>activate/deactivate: 手動制御</item>
+        <item>autoactivate on: 自動アクティベーション</item>
+        <item>create: インスタンス生成</item>
+        <item>destroy: インスタンス破棄</item>
+        <item>return: 戻りメッセージ</item>
+      </list>
+    </cp>
+
+    <cp caption="ショートカット記法">
+      <list>
+        <item>++: アクティベート</item>
+        <item>--: デアクティベート</item>
+        <item>**: インスタンス生成</item>
+        <item>!!: インスタンス破棄</item>
+        <item>組み合わせ例: alice -#gt; bob ++, bob -#gt; charlie --++</item>
+      </list>
+    </cp>
+
+    <cp caption="時間表現">
+      <list>
+        <item>...: 遅延</item>
+        <item>...5 minutes later...: コメント付き遅延</item>
+        <item>|||: 垂直間隔</item>
+        <item>||45||: ピクセル指定間隔</item>
+      </list>
+    </cp>
+
+    <cp caption="アンカーと期間（teoz）">
+      <code lang="plantuml">
+!pragma teoz true
+{start} Alice -#gt; Bob: 処理開始
+Bob -#gt; Max: 何かの処理
+{end} Max -#gt; Alice: 完了
+{start} #lt;-#gt; {end}: 処理時間
+      </code>
+    </cp>
+  </section>
+
+  <h>制御構造とグルーピング</h>
+  <section>
+    <cp caption="条件分岐とループ">
+      <code lang="plantuml">
+alt successful case
+    Bob -#gt; Alice: Success
+else failure case
+    Bob -#gt; Alice: Error
+    group Error Handling
+        Alice -#gt; Log: Log error
+        loop retry
+            Alice -#gt; Bob: Retry
+        end
+    end
+end
+      </code>
+    </cp>
+
+    <cp caption="制御構造の種類">
+      <list>
+        <item>alt/else: 条件分岐</item>
+        <item>opt: オプション処理</item>
+        <item>loop: ループ処理</item>
+        <item>par: 並列処理</item>
+        <item>break: 中断処理</item>
+        <item>critical: クリティカルセクション</item>
+        <item>group: グループ化</item>
+      </list>
+    </cp>
+
+    <cp caption="制御構造の装飾">
+      <list>
+        <item>alt#Gold #LightBlue: 色付き条件</item>
+        <item>group "Label" [Secondary]: セカンダリラベル</item>
+        <item>mainframe "Title": メインフレーム</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>境界とメッセージフロー</h>
+  <section>
+    <cp caption="入出力メッセージ">
+      <code lang="plantuml">
+[-#gt; A: 外部からの入力
+A -#gt;]: 外部への出力
+?-#gt; A: 短い入力矢印
+A -#gt;?: 短い出力矢印
+      </code>
+    </cp>
+
+    <cp caption="区切りと参照">
+      <list>
+        <item>== Section Title ==: セクション区切り</item>
+        <item>ref over A,B: 参照ブロック</item>
+        <item>newpage: ページ分割</item>
+        <item>newpage "Title": タイトル付きページ分割</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>書式設定とスタイリング</h>
+  <section>
+    <cp caption="テキスト装飾（Creole/HTML）">
+      <list>
+        <item>**bold**: 太字</item>
+        <item>//italics//: 斜体</item>
+        <item>__underlined__: 下線</item>
+        <item>--stroked--: 取り消し線</item>
+        <item>~~waved~~: 波線</item>
+        <item>""monospaced"": 等幅フォント</item>
+        <item>#lt;color #hash;red#gt;colored text#lt;/color#gt;: 色付きテキスト</item>
+        <item>#lt;size:18#gt;sized text#lt;/size#gt;: サイズ指定</item>
+      </list>
+    </cp>
+
+    <cp caption="スキンパラメータ">
+      <code lang="plantuml">
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+skinparam backgroundColor #EEEBDC
+skinparam handwritten true
+      </code>
+    </cp>
+
+    <cp caption="特殊なスタイル設定">
+      <list>
+        <item>skinparam lifelineStrategy solid|nosolid: ライフライン表示</item>
+        <item>skinparam style strictuml: 厳密UMLスタイル</item>
+        <item>skinparam ParticipantPadding 20: 参加者パディング</item>
+        <item>skinparam BoxPadding 10: ボックスパディング</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>高度な機能</h>
+  <section>
+    <cp caption="並列処理（teoz）">
+      <code lang="plantuml">
+!pragma teoz true
+Alice -#gt; Bob: hello
+#amp; Bob -#gt; Charlie: hi
+      </code>
+    </cp>
+
+    <cp caption="傾斜矢印（v1.2022.6beta+）">
+      <code lang="plantuml">
+A -#gt;(10) B: 10ピクセル傾斜
+B -#gt;(20) A: 20ピクセル傾斜
+      </code>
+    </cp>
+
+    <cp caption="タイトルとヘッダー/フッター">
+      <code lang="plantuml">
+title Simple **communication** example\non several lines
+header Page Header  
+footer Page %page% of %lastpage%
+      </code>
+    </cp>
+  </section>
+
+  <h>ベストプラクティス</h>
+  <section>
+    <cp caption="効果的な図作成のコツ">
+      <list>
+        <item>参加者を論理的順序で配置（order使用）</item>
+        <item>適切な色分けでグループや状態を表現</item>
+        <item>ノートで重要な情報を補足</item>
+        <item>自動番号付けで追跡可能性向上</item>
+        <item>制御構造で複雑なフローを構造化</item>
+        <item>ボックスで関連する参加者をグループ化</item>
+        <item>遅延や間隔で時間経過を表現</item>
+      </list>
+    </cp>
+
+    <cp caption="パフォーマンスと可読性">
+      <list>
+        <item>大きな図はnewpageで分割</item>
+        <item>未使用参加者はhide unlinkedで非表示</item>
+        <item>長いメッセージは適切に改行</item>
+        <item>一貫したネーミング規則を使用</item>
+        <item>ステレオタイプで参加者の役割を明確化</item>
+      </list>
+    </cp>
+  </section>
+
+  <h>サンプルパターン</h>
+  <section>
+    <cp caption="認証フローの例">
+      <code lang="plantuml">
+@startuml
+autonumber
+actor User
+participant "Auth Service" as Auth
+database "User DB" as DB
+
+User -#gt; Auth: Login Request
+activate Auth
+Auth -#gt; DB: Validate Credentials
+activate DB
+alt valid credentials
+    DB --#gt; Auth: User Data
+    Auth --#gt; User: Success Token
+else invalid credentials
+    DB --#gt; Auth: Error
+    Auth --#gt; User: Login Failed
+end
+deactivate DB
+deactivate Auth
+@enduml
+      </code>
+    </cp>
+
+    <cp caption="APIコールパターン">
+      <code lang="plantuml">
+@startuml
+participant Client
+participant "API Gateway" as API
+participant "Service A" as A
+participant "Service B" as B
+
+Client -#gt; API: Request
+API -#gt; A++: Process
+A -#gt; B++: Sub-process
+B --#gt; A--: Result
+A --#gt; API--: Response
+API --#gt; Client: Final Result
+
+note over A, B: 並列処理も可能
+@enduml
+      </code>
+    </cp>
+  </section>
+
+  <p>Reference: https://plantuml.com/ja-dark/sequence-diagram</p>
+</poml>
