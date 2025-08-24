@@ -2,7 +2,12 @@
 
   <!-- metadata -->
   <meta>
-    <format>PlantUML 共通プロンプト</format>
+    <title>POML構文ガイド用プロンプト</title>
+    <description>
+      POML（Prompt Orchestration Markup Language）の構文に関するガイド。
+      主な用途は、POMLファイルの量産をするためのプロンプトエンジニアリング支援。
+      POML形式でのプロンプト管理実証も兼ねる。
+    </description>
     <version>0.1.0</version>
   </meta>
 
